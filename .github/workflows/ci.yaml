@@ -510,7 +510,7 @@ jobs:
           - enterprise: false
             name: test-e2e
           - enterprise: true
-            name: test-e2e-enterprise
+            name: test-e2e-licensed
     name: ${{ matrix.variant.name }}
     steps:
       - name: Checkout
