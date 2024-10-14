@@ -28,7 +28,7 @@ test("setup deployment", async ({ page }) => {
 	await page.getByTestId("button-select-template").isVisible();
 
 	// Setup license
-	if (constants.requirePremiumTests || constants.license) {
+	if (constants.premiumTestsRequired || constants.license) {
 		// Make sure that we have something that looks like a real license
 		expect(constants.license).toBeTruthy();
 		expect(constants.license.length).toBeGreaterThan(92); // the signature alone should be this long

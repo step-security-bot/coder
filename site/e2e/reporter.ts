@@ -110,7 +110,7 @@ class CoderReporter implements Reporter {
 		console.info(`==> Tests ${result.status}`);
 		if (!license) {
 			console.info(
-				"==> Premium tests were skipped, because no license was provided",
+				"==> Tests that require a license were skipped, because no license was provided",
 			);
 		}
 		console.info(`${this.passedCount} passed`);

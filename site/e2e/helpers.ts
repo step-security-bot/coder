@@ -18,7 +18,7 @@ import {
 	coderPort,
 	license,
 	prometheusPort,
-	requirePremiumTests,
+	premiumTestsRequired,
 	requireTerraformTests,
 } from "./constants";
 import { expectUrl } from "./expectUrl";
@@ -35,22 +35,37 @@ import {
 	type RichParameter,
 } from "./provisionerGenerated";
 
-// requiresLicense will skip the test if we're not running with a license added
+/**
+ * requiresLicense will skip the test if we're not running with a license added
+ */
 export function requiresLicense() {
-	if (requirePremiumTests) {
+	if (premiumTestsRequired) {
 		return;
 	}
 
 	test.skip(!license);
 }
 
-// requireTerraformProvisioner by default is enabled.
+/**
+ * This function is used to mark a few e2e tests that seem to always fail when
+ * running with a license. If we can ever get all of them fixed we should remove
+ * this.
+ */
+export function failsWithLicense() {
+	test.skip(Boolean(license));
+}
+
+/**
+ * requireTerraformProvisioner by default is enabled.
+ */
 export function requireTerraformProvisioner() {
 	test.skip(!requireTerraformTests);
 }
 
-// createWorkspace creates a workspace for a template.
-// It does not wait for it to be running, but it does navigate to the page.
+/**
+ * createWorkspace creates a workspace for a template. It does not wait for it
+ * to be running, but it does navigate to the page.
+ */
 export const createWorkspace = async (
 	page: Page,
 	templateName: string,
@@ -90,7 +105,7 @@ export const createWorkspace = async (
 
 	await expectUrl(page).toHavePathName(`/@admin/${name}`);
 
-	await page.waitForSelector("*[data-testid='build-status'] >> text=Running", {
+	await page.waitForSelector("[data-testid='build-status'] >> text=Running", {
 		state: "visible",
 	});
 	return name;
@@ -151,8 +166,10 @@ export const verifyParameters = async (
 	}
 };
 
-// StarterTemplates are ids of starter templates that can be used in place of
-// the responses payload. These starter templates will require real provisioners.
+/**
+ * StarterTemplates are ids of starter templates that can be used in place of
+ * the responses payload. These starter templates will require real provisioners.
+ */
 export enum StarterTemplates {
 	STARTER_DOCKER = "docker",
 }
@@ -166,8 +183,10 @@ function isStarterTemplate(
 	return typeof input === "string";
 }
 
-// createTemplate navigates to the /templates/new page and uploads a template
-// with the resources provided in the responses argument.
+/**
+ * createTemplate navigates to the /templates/new page and uploads a template
+ * with the resources provided in the responses argument.
+ */
 export const createTemplate = async (
 	page: Page,
 	responses?: EchoProvisionerResponses | StarterTemplates,
@@ -200,8 +219,10 @@ export const createTemplate = async (
 	return name;
 };
 
-// createGroup navigates to the /groups/create page and creates a group with a
-// random name.
+/**
+ * createGroup navigates to the /groups/create page and creates a group with a
+ * random name.
+ */
 export const createGroup = async (page: Page): Promise<string> => {
 	await page.goto("/groups/create", { waitUntil: "domcontentloaded" });
 	await expectUrl(page).toHavePathName("/groups/create");
@@ -215,7 +236,9 @@ export const createGroup = async (page: Page): Promise<string> => {
 	return name;
 };
 
-// sshIntoWorkspace spawns a Coder SSH process and a client connected to it.
+/**
+ * sshIntoWorkspace spawns a Coder SSH process and a client connected to it.
+ */
 export const sshIntoWorkspace = async (
 	page: Page,
 	workspace: string,
@@ -298,8 +321,10 @@ export const buildWorkspaceWithParameters = async (
 	});
 };
 
-// startAgent runs the coder agent with the provided token.
-// It awaits the agent to be ready before returning.
+/**
+ * startAgent runs the coder agent with the provided token. It waits for the
+ * agent to be ready before returning.
+ */
 export const startAgent = async (
 	page: Page,
 	token: string,
@@ -307,8 +332,10 @@ export const startAgent = async (
 	return startAgentWithCommand(page, token, "go", "run", coderMain);
 };
 
-// downloadCoderVersion downloads the version provided into a temporary dir and
-// caches it so subsequent calls are fast.
+/**
+ * downloadCoderVersion downloads the version provided into a temporary dir and
+ * caches it so subsequent calls are fast.
+ */
 export const downloadCoderVersion = async (
 	version: string,
 ): Promise<string> => {
@@ -448,8 +475,10 @@ interface EchoProvisionerResponses {
 	apply?: RecursivePartial<Response>[];
 }
 
-// createTemplateVersionTar consumes a series of echo provisioner protobufs and
-// converts it into an uploadable tar file.
+/**
+ * createTemplateVersionTar consumes a series of echo provisioner protobufs and
+ * converts it into an uploadable tar file.
+ */
 const createTemplateVersionTar = async (
 	responses?: EchoProvisionerResponses,
 ): Promise<Buffer> => {
@@ -619,8 +648,10 @@ export const randomName = () => {
 	return randomUUID().slice(0, 8);
 };
 
-// Awaiter is a helper that allows you to wait for a callback to be called.
-// It is useful for waiting for events to occur.
+/**
+ * Awaiter is a helper that allows you to wait for a callback to be called. It
+ * is useful for waiting for events to occur.
+ */
 export class Awaiter {
 	private promise: Promise<void>;
 	private callback?: () => void;
