@@ -3,6 +3,7 @@ import { expectUrl } from "../expectUrl";
 import {
 	createGroup,
 	createTemplate,
+	failsWithLicense,
 	requiresLicense,
 	updateTemplateSettings,
 } from "../helpers";
@@ -13,6 +14,8 @@ test.beforeEach(({ page }) => beforeCoderTest(page));
 test("template update with new name redirects on successful submit", async ({
 	page,
 }) => {
+	failsWithLicense();
+
 	const templateName = await createTemplate(page);
 
 	await updateTemplateSettings(page, templateName, {
@@ -23,10 +26,10 @@ test("template update with new name redirects on successful submit", async ({
 test("add and remove a group", async ({ page }) => {
 	requiresLicense();
 
-	const templateName = await createTemplate(page);
+	const templateName = await createTemplate(page, undefined, "coder");
 	const groupName = await createGroup(page);
 
-	await page.goto(`/templates/${templateName}/settings/permissions`, {
+	await page.goto(`/templates/coder/${templateName}/settings/permissions`, {
 		waitUntil: "domcontentloaded",
 	});
 	await expectUrl(page).toHavePathName(
