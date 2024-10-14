@@ -17,8 +17,8 @@ import {
 	coderMain,
 	coderPort,
 	license,
-	prometheusPort,
 	premiumTestsRequired,
+	prometheusPort,
 	requireTerraformTests,
 } from "./constants";
 import { expectUrl } from "./expectUrl";
