@@ -558,7 +558,7 @@ jobs:
         if: always() && github.actor != 'dependabot[bot]' && runner.os == 'Linux' && !github.event.pull_request.head.repo.fork
         uses: actions/upload-artifact@604373da6381bf24206979c74d06a550515601b9 # v4.4.1
         with:
-          name: failed-test-videos${{ matrix.variant.premium && '-premium' || '-agpl' }}
+          name: failed-test-videos${{ matrix.variant.premium && '-premium' || '' }}
           path: ./site/test-results/**/*.webm
           retention-days: 7
 
@@ -566,7 +566,7 @@ jobs:
         if: always() && github.actor != 'dependabot[bot]' && runner.os == 'Linux' && !github.event.pull_request.head.repo.fork
         uses: actions/upload-artifact@604373da6381bf24206979c74d06a550515601b9 # v4.4.1
         with:
-          name: debug-pprof-dumps${{ matrix.variant.premium && '-premium' || '-agpl'  }}
+          name: debug-pprof-dumps${{ matrix.variant.premium && '-premium' || ''  }}
           path: ./site/test-results/**/debug-pprof-*.txt
           retention-days: 7
 
