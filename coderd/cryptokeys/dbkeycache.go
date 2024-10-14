@@ -269,7 +269,7 @@ func isEncryptionKeyFeature(feature database.CryptoKeyFeature) bool {
 
 func isSigningKeyFeature(feature database.CryptoKeyFeature) bool {
 	switch feature {
-	case database.CryptoKeyFeatureTailnetResume, database.CryptoKeyFeatureOIDCConvert:
+	case database.CryptoKeyFeatureTailnetResume, database.CryptoKeyFeatureOIDCConvert, database.CryptoKeyFeatureWorkspaceAppsToken:
 		return true
 	default:
 		return false
