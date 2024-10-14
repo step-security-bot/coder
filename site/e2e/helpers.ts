@@ -190,7 +190,7 @@ function isStarterTemplate(
 export const createTemplate = async (
 	page: Page,
 	responses?: EchoProvisionerResponses | StarterTemplates,
-	organizationName: string = "coder",
+	organizationName = "coder",
 ): Promise<string> => {
 	let path = "/templates/new";
 	if (isStarterTemplate(responses)) {
