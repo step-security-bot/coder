@@ -190,6 +190,7 @@ function isStarterTemplate(
 export const createTemplate = async (
 	page: Page,
 	responses?: EchoProvisionerResponses | StarterTemplates,
+	organizationName: string = "coder",
 ): Promise<string> => {
 	let path = "/templates/new";
 	if (isStarterTemplate(responses)) {
@@ -210,12 +211,26 @@ export const createTemplate = async (
 		});
 	}
 
+	// If the organization picker is present on the page, select the default
+	// organization.
+	const orgPicker = page.getByLabel("Belongs to *");
+	const organizationsEnabled = await orgPicker.isVisible();
+	if (organizationsEnabled) {
+		await orgPicker.click();
+		await page.getByText(organizationName, { exact: true }).click();
+	}
+
 	const name = randomName();
 	await page.getByLabel("Name *").fill(name);
 	await page.getByTestId("form-submit").click();
-	await expectUrl(page).toHavePathName(`/templates/${name}/files`, {
-		timeout: 30000,
-	});
+	await expectUrl(page).toHavePathName(
+		organizationsEnabled
+			? `/templates/${organizationName}/${name}/files`
+			: `/templates/${name}/files`,
+		{
+			timeout: 30000,
+		},
+	);
 	return name;
 };
 
