@@ -68,10 +68,10 @@ test("set service banner", async ({ page }) => {
 	const message = "Mary has a little lamb.";
 
 	// Fill out the form
-	const form = page.locator("form", { hasText: "Service Banner" });
-	await form.getByLabel("Enabled", { exact: true }).check();
+	await page.getByRole("button", { name: "New" }).click();
+	const form = page.getByRole("presentation");
 	await form.getByLabel("Message", { exact: true }).fill(message);
-	await form.getByRole("button", { name: "Submit" }).click();
+	await form.getByRole("button", { name: "Update" }).click();
 
 	// Verify service banner
 	await page.goto("/workspaces", { waitUntil: "domcontentloaded" });
