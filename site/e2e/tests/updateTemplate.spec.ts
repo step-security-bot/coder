@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { defaultOrganizationName } from "../constants";
 import { expectUrl } from "../expectUrl";
 import {
 	createGroup,
@@ -8,7 +9,6 @@ import {
 	updateTemplateSettings,
 } from "../helpers";
 import { beforeCoderTest } from "../hooks";
-import { defaultOrganizationName } from "../constants";
 
 test.beforeEach(({ page }) => beforeCoderTest(page));
 
