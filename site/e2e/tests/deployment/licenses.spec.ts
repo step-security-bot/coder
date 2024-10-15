@@ -12,7 +12,7 @@ test("license was added successfully", async ({ page }) => {
 
 	// Trial vs. Enterprise?
 	const accountType = firstLicense.locator(".account-type");
-	await expect(accountType).toHaveText("Enterprise");
+	await expect(accountType).toHaveText("Premium");
 
 	// License should not be expired yet
 	const licenseExpires = firstLicense.locator(".license-expires");
