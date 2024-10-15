@@ -8,6 +8,7 @@ import {
 	updateTemplateSettings,
 } from "../helpers";
 import { beforeCoderTest } from "../hooks";
+import { defaultOrganizationName } from "../constants";
 
 test.beforeEach(({ page }) => beforeCoderTest(page));
 
@@ -17,7 +18,6 @@ test("template update with new name redirects on successful submit", async ({
 	failsWithLicense();
 
 	const templateName = await createTemplate(page);
-
 	await updateTemplateSettings(page, templateName, {
 		name: "new-name",
 	});
@@ -26,14 +26,13 @@ test("template update with new name redirects on successful submit", async ({
 test("add and remove a group", async ({ page }) => {
 	requiresLicense();
 
-	const templateName = await createTemplate(page, undefined, "coder");
+	const orgName = defaultOrganizationName;
+	const templateName = await createTemplate(page, undefined, orgName);
 	const groupName = await createGroup(page);
 
-	await page.goto(`/templates/coder/${templateName}/settings/permissions`, {
-		waitUntil: "domcontentloaded",
-	});
-	await expectUrl(page).toHavePathName(
-		`/templates/${templateName}/settings/permissions`,
+	await page.goto(
+		`/templates/${orgName}/${templateName}/settings/permissions`,
+		{ waitUntil: "domcontentloaded" },
 	);
 
 	// Type the first half of the group name

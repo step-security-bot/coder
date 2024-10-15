@@ -16,6 +16,7 @@ import {
 	agentPProfPort,
 	coderMain,
 	coderPort,
+	defaultOrganizationName,
 	license,
 	premiumTestsRequired,
 	prometheusPort,
@@ -190,7 +191,7 @@ function isStarterTemplate(
 export const createTemplate = async (
 	page: Page,
 	responses?: EchoProvisionerResponses | StarterTemplates,
-	organizationName = "coder",
+	orgName = defaultOrganizationName,
 ): Promise<string> => {
 	let path = "/templates/new";
 	if (isStarterTemplate(responses)) {
@@ -217,7 +218,7 @@ export const createTemplate = async (
 	const organizationsEnabled = await orgPicker.isVisible();
 	if (organizationsEnabled) {
 		await orgPicker.click();
-		await page.getByText(organizationName, { exact: true }).click();
+		await page.getByText(orgName, { exact: true }).click();
 	}
 
 	const name = randomName();
@@ -225,7 +226,7 @@ export const createTemplate = async (
 	await page.getByTestId("form-submit").click();
 	await expectUrl(page).toHavePathName(
 		organizationsEnabled
-			? `/templates/${organizationName}/${name}/files`
+			? `/templates/${orgName}/${name}/files`
 			: `/templates/${name}/files`,
 		{
 			timeout: 30000,
@@ -245,9 +246,7 @@ export const createGroup = async (page: Page): Promise<string> => {
 	const name = randomName();
 	await page.getByLabel("Name", { exact: true }).fill(name);
 	await page.getByTestId("form-submit").click();
-	await expect(page).toHaveURL(
-		/\/groups\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/,
-	);
+	await expectUrl(page).toHavePathName(`/groups/${name}`);
 	return name;
 };
 
@@ -871,7 +870,6 @@ export const updateTemplateSettings = async (
 	await page.goto(`/templates/${templateName}/settings`, {
 		waitUntil: "domcontentloaded",
 	});
-	await expectUrl(page).toHavePathName(`/templates/${templateName}/settings`);
 
 	for (const [key, value] of Object.entries(templateSettingValues)) {
 		// Skip max_port_share_level for now since the frontend is not yet able to handle it
@@ -885,7 +883,7 @@ export const updateTemplateSettings = async (
 	await page.getByTestId("form-submit").click();
 
 	const name = templateSettingValues.name ?? templateName;
-	await expectUrl(page).toHavePathName(`/templates/${name}`);
+	await expectUrl(page).toHavePathNameEndingWith(`/${name}`);
 };
 
 export const updateWorkspace = async (
