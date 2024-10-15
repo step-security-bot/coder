@@ -9,15 +9,15 @@ test.beforeEach(async ({ page }) => {
 	await setupApiCalls(page);
 });
 
-test("create and delete organization", async ({ page, baseURL }) => {
+test("create and delete organization", async ({ page }) => {
 	requiresLicense();
 
 	// Create an organization
-	await page.goto(`${baseURL}/organizations/new`, {
+	await page.goto("/organizations/new", {
 		waitUntil: "domcontentloaded",
 	});
 
-	await page.getByLabel("Name", { exact: true }).fill("floop");
+	await page.getByLabel("Slug", { exact: true }).fill("floop");
 	await page.getByLabel("Display name").fill("Floop");
 	await page.getByLabel("Description").fill("Org description floop");
 	await page.getByLabel("Icon", { exact: true }).fill("/emojis/1f957.png");

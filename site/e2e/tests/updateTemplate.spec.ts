@@ -4,7 +4,6 @@ import { expectUrl } from "../expectUrl";
 import {
 	createGroup,
 	createTemplate,
-	failsWithLicense,
 	requiresLicense,
 	updateTemplateSettings,
 } from "../helpers";
@@ -15,8 +14,6 @@ test.beforeEach(({ page }) => beforeCoderTest(page));
 test("template update with new name redirects on successful submit", async ({
 	page,
 }) => {
-	failsWithLicense();
-
 	const templateName = await createTemplate(page);
 	await updateTemplateSettings(page, templateName, {
 		name: "new-name",

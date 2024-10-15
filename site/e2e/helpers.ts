@@ -48,15 +48,6 @@ export function requiresLicense() {
 }
 
 /**
- * This function is used to mark a few e2e tests that seem to always fail when
- * running with a license. If we can ever get all of them fixed we should remove
- * this.
- */
-export function failsWithLicense() {
-	test.skip(Boolean(license));
-}
-
-/**
  * requireTerraformProvisioner by default is enabled.
  */
 export function requireTerraformProvisioner() {
