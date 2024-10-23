@@ -1,4 +1,4 @@
-FROM rust:slim AS rust-utils
+FROM rust:slim@sha256:9abf10cc84dfad6ace1b0aae3951dc5200f467c593394288c11db1e17bb4d349 AS rust-utils
 # Install rust helper programs
 # ENV CARGO_NET_GIT_FETCH_WITH_CLI=true
 ENV CARGO_INSTALL_ROOT=/tmp/
@@ -6,7 +6,7 @@ RUN cargo install exa bat ripgrep typos-cli watchexec-cli && \
 	# Reduce image size.
 	rm -rf /usr/local/cargo/registry
 
-FROM ubuntu:jammy AS go
+FROM ubuntu:jammy@sha256:0e5e4a57c2499249aafc3b40fcd541e9a456aab7296681a3994d631587203f97 AS go
 
 # Install Go manually, so that we can control the version
 ARG GO_VERSION=1.22.5
@@ -87,14 +87,14 @@ RUN apt-get update && \
 	rm -rf /tmp/go/pkg && \
 	rm -rf /tmp/go/src
 
-FROM gcr.io/coder-dev-1/alpine:3.18 as proto
+FROM gcr.io/coder-dev-1/alpine:3.18@sha256:25fad2a32ad1f6f510e528448ae1ec69a28ef81916a004d3629874104f8a7f70 as proto
 WORKDIR /tmp
 RUN apk add curl unzip
 RUN curl -L -o protoc.zip https://github.com/protocolbuffers/protobuf/releases/download/v23.3/protoc-23.3-linux-x86_64.zip && \
 	unzip protoc.zip && \
 	rm protoc.zip
 
-FROM ubuntu:jammy
+FROM ubuntu:jammy@sha256:0e5e4a57c2499249aafc3b40fcd541e9a456aab7296681a3994d631587203f97
 
 SHELL ["/bin/bash", "-c"]
 
