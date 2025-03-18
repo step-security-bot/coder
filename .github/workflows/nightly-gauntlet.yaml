@@ -101,6 +101,11 @@ jobs:
     if: failure() && github.ref == 'refs/heads/main'
 
     steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@v2
+        with:
+          egress-policy: audit
+
       - name: Send Slack notification
         run: |
           curl -X POST -H 'Content-type: application/json' \
