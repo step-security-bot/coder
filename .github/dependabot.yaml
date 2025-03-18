@@ -104,3 +104,53 @@ updates:
         update-types:
           - version-update:semver-major
     open-pull-requests-limit: 15
+
+  - package-ecosystem: docker
+    directory: /dogfood/coder
+    schedule:
+      interval: daily
+
+  - package-ecosystem: docker
+    directory: /examples/jfrog/docker/build
+    schedule:
+      interval: daily
+
+  - package-ecosystem: docker
+    directory: /examples/parameters/build
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /offlinedocs
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: daily
+
+  - package-ecosystem: docker
+    directory: /scaletest/templates/scaletest-runner
+    schedule:
+      interval: daily
+
+  - package-ecosystem: docker
+    directory: /scripts
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /scripts/apidocgen
+    schedule:
+      interval: daily
+
+  - package-ecosystem: docker
+    directory: /scripts/ironbank
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /site
+    schedule:
+      interval: daily
